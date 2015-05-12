@@ -79,7 +79,9 @@
 
 										<h5 class="latestnews-title"><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></h5>
 
-										<?php the_excerpt(); ?>
+										<div class="white-text">
+											<?php the_excerpt(); ?>
+										</div>
 
 									</div>
 
@@ -106,7 +108,9 @@
 									</div>
 									<div class="latesnews-content">
 										<h5 class="latestnews-title"><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></h5>
-										<?php the_excerpt(); ?>
+										<div class="white-text">
+											<?php the_excerpt(); ?>
+										</div>
 									</div>
 								</div>
 							</div>

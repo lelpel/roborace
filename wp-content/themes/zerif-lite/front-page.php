@@ -311,6 +311,18 @@ if ( get_option( 'show_on_front' ) == 'page' ) {
 	endif;
 
 
+	
+	/* LATEST NEWS */
+	$zerif_latestnews_show = get_theme_mod('zerif_latestnews_show');
+
+	if( isset($zerif_latestnews_show) && $zerif_latestnews_show != 1 ):
+
+		include get_template_directory() . "/sections/latest_news.php";
+
+	endif;
+
+	
+
 	/* RIBBON WITH BOTTOM BUTTON */
 
 
@@ -359,16 +371,6 @@ if ( get_option( 'show_on_front' ) == 'page' ) {
 
 	include get_template_directory() . "/sections/ribbon_with_right_button.php";
 
-
-
-	/* LATEST NEWS */
-	$zerif_latestnews_show = get_theme_mod('zerif_latestnews_show');
-
-	if( isset($zerif_latestnews_show) && $zerif_latestnews_show != 1 ):
-
-		include get_template_directory() . "/sections/latest_news.php";
-
-	endif;
 
 
 
