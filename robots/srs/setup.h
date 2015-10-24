@@ -1,0 +1,77 @@
+
+#define writePIN_D0_HIGHT PORTD = PORTD | B00000001;
+#define writePIN_D1_HIGHT PORTD = PORTD | B00000010;
+#define writePIN_D2_HIGHT PORTD = PORTD | B00000100;
+#define writePIN_D3_HIGHT PORTD = PORTD | B00001000;
+#define writePIN_D4_HIGHT PORTD = PORTD | B00010000;
+#define writePIN_D5_HIGHT PORTD = PORTD | B00100000;
+#define writePIN_D6_HIGHT PORTD = PORTD | B01000000;
+#define writePIN_D7_HIGHT PORTD = PORTD | B10000000;
+#define writePIN_D8_HIGHT PORTB = PORTB | B00000001;
+#define writePIN_D9_HIGHT PORTB = PORTB | B00000010;
+#define writePIN_D10_HIGHT PORTB = PORTB | B00000100;
+#define writePIN_D11_HIGHT PORTB = PORTB | B00001000;
+#define writePIN_D12_HIGHT PORTB = PORTB | B00010000;
+#define writePIN_D13_HIGHT PORTB = PORTB | B00100000;
+
+#define writePIN_A0_HIGHT PORTC = PORTC | B00000001;
+#define writePIN_A1_HIGHT PORTC = PORTC | B00000010;
+#define writePIN_A2_HIGHT PORTC = PORTC | B00000100;
+#define writePIN_A3_HIGHT PORTC = PORTC | B00001000;
+#define writePIN_A4_HIGHT PORTC = PORTC | B00010000;
+#define writePIN_A5_HIGHT PORTC = PORTC | B00100000;
+#define writePIN_A6_HIGHT PORTC = PORTC | B01000000;
+#define writePIN_A7_HIGHT PORTC = PORTC | B10000000;
+
+
+
+
+#define writePIN_D0_LOW PORTD = PORTD & B11111110;
+#define writePIN_D1_LOW PORTD = PORTD & B11111101;
+#define writePIN_D2_LOW PORTD = PORTD & B11111011;
+#define writePIN_D3_LOW PORTD = PORTD & B11110111;
+#define writePIN_D4_LOW PORTD = PORTD & B11101111;
+#define writePIN_D5_LOW PORTD = PORTD & B11011111;
+#define writePIN_D6_LOW PORTD = PORTD & B10111111;
+#define writePIN_D7_LOW PORTD = PORTD & B01111111;
+#define writePIN_D8_LOW PORTB =  PORTB & B11111110;
+#define writePIN_D9_LOW PORTB =  PORTB & B11111101;
+#define writePIN_D10_LOW PORTB = PORTB & B11111011;
+#define writePIN_D11_LOW PORTB = PORTB & B11110111;
+#define writePIN_D12_LOW PORTB = PORTB & B11101111;
+#define writePIN_D13_LOW PORTB = PORTB & B11011111;
+
+#define writePIN_A0_LOW PORTC = PORTC & B11111110;
+#define writePIN_A1_LOW PORTC = PORTC & B11111101;
+#define writePIN_A2_LOW PORTC = PORTC & B11111011;
+#define writePIN_A3_LOW PORTC = PORTC & B11110111;
+#define writePIN_A4_LOW PORTC = PORTC & B11101111;
+#define writePIN_A5_LOW PORTC = PORTC & B11011111;
+#define writePIN_A6_LOW PORTC = PORTC & B10111111;
+#define writePIN_A7_LOW PORTC = PORTC & B01111111;
+
+
+#define readPIN_A0 (PINC & B01111110);
+#define readPIN_A1 (PINC & B11111101)>>1;
+#define readPIN_A2 (PINC & B11111011)>>2;
+#define readPIN_A3 (PINC & B11110111)>>3;
+#define readPIN_A4 (PINC & B11101111)>>4;
+#define readPIN_A5 (PINC & B11011111)>>5;
+#define readPIN_A6 (PINC & B10111111)>>6;
+#define readPIN_A7 (PINC & B01111111)>>7;
+
+#define readPIN_D0  (PIND & B01111110);
+#define readPIN_D1  (PIND & B11111101)>>1;
+#define readPIN_D2  (PIND & B11111011)>>2;
+#define readPIN_D3  (PIND & B11110111)>>3;
+#define readPIN_D4  (PIND & B11101111)>>4;
+#define readPIN_D5  (PIND & B11011111)>>5;
+#define readPIN_D6  (PIND & B10111111)>>6;
+#define readPIN_D7  (PIND & B01111111)>>7;
+#define readPIN_D8  (PINB & B11111110);
+#define readPIN_D9  (PINB & B11111101)>>1;
+#define readPIN_D10 (PINB & B11111011)>>2;
+#define readPIN_D11 (PINB & B11110111)>>3;
+#define readPIN_D12 (PINB & B11101111)>>4
+#define readPIN_D13 (PINB & B11011111)>>5;
+
