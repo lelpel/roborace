@@ -2,8 +2,8 @@
 #define LED_PIN 13
 //servo (rotate frontal wheels) 
 #define SERVO_PIN 9
-#define SERVO_OFFSET 100
-#define SERVO_MAX_ANGLE 70
+#define SERVO_OFFSET 90
+#define SERVO_MAX_ANGLE 20
 #define STCALC(a) (SERVO_OFFSET+(a)) 
 
 // motor (back wheels are powered)

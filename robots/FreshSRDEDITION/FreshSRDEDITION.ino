@@ -6,7 +6,7 @@
 #include <IRremote.h>
 #include "config.h"
 #include "motor.h"
-#include <PWMServo.h>
+#include "PWMServo.h"
 #include <Servo.h>
 #include "sensors.h"
 
@@ -73,6 +73,17 @@ unsigned long ir_command;
 
 void loop()
 { 
+while(1)
+  {  
+//    writeServo(0);
+    
+    writeServo(SERVO_MAX_ANGLE);
+    delay(2000);
+    writeServo(0);
+    delay(2000);
+    writeServo(-SERVO_MAX_ANGLE);
+    delay(2000);
+  }
   /*
   while(1)
   {    

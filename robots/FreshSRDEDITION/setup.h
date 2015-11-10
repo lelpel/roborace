@@ -1,14 +1,5 @@
 
 
-
-
-
-
-
-
-
-
-
 #define writePIN_D0_HIGHT PORTD = PORTD | B00000001;
 #define writePIN_D1_HIGHT PORTD = PORTD | B00000010;
 #define writePIN_D2_HIGHT PORTD = PORTD | B00000100;

@@ -5,7 +5,7 @@
 #include "setup.h"
 #include "config.h"
 #include "motor.h"
-#include <PWMServo.h>
+#include "PWMServo.h"
 #include <Servo.h>
 
 // MOTOR
