@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html data-ng-app="applicationAN" data-ng-csp="">
+	<head>
+		<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="angular-csp.css" />
+
+		<script src="angular.js"></script>
+		<script src="app.js"></script>
+	</head>
+	<body ng-controller="TabController as tabs">
+
+		<a ng-click="tabs.setTab(1)">Teams</a>
+		<a ng-click="tabs.setTab(2)">Qualification</a>
+		<a ng-click="tabs.setTab(3)">Race</a>
+
+		<div ng-controller="TeamsController" ng-show="tabs.isSet(1)">
+			<p>
+				<input ng-model="name"></input>
+				<button class="btn btn-default" ng-click="addTeam(name)">Add team</button>
+			</p>
+			<div ng-repeat="value in teams">
+				<p>
+					{{$index+1+" "+value.name}} 
+					<a ng-click="delTab($index)">Remove</a>
+				</p>
+			</div>
+			<button class="btn btn-default" ng-click="save()">Save</button>
+		</div>
+
+		<div ng-controller="QualificationController" ng-show="tabs.isSet(2)">
+			qualification
+			{{counter | date:'mm:ss:sss'}}
+			<div ng-repeat="value in team.teams">
+				<p>
+					{{$index+1+" "+value.name}} - {{value.t1 | date:'mm:ss:sss'}}
+					<button class="btn btn-default" ng-click="start($index)">Start</button>
+					<button class="btn btn-default" ng-click="stop($index)">Stop</button>
+				</p>
+			</div>
+		</div>
+
+		<div ng-controller="RaceController as obj" ng-show="tabs.isSet(3)">
+			<p>best time {{obj.bestLap | date:'mm:ss:sss'}}</p>
+			<p>Number of laps in a race {{obj.team.numberLaps}}</p>
+			<p>
+				Race start {{obj.startTime | date:'hh:mm:ss:sss'}} 
+				<button class="btn btn-default" ng-click="obj.startRace()">Start</button>
+			</p>
+			<div ng-repeat="value in obj.team.teams">
+				<p>{{$index+1+" "+value.name}}
+					  make {{value.laps}} laps in {{value.time | date:'mm:ss:sss'}} {{value.finished}}
+					<button class="btn btn-default" class="btn-u" ng-click="obj.addLap($index)">Add lap to team</button>
+				</p>
+			</div>
+		</div>
+
+	</body>
+</html>
