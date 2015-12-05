@@ -4,7 +4,6 @@
 		<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css" />
 		<link rel="stylesheet" type="text/css" href="angular-csp.css" />
-
 		<script src="angular.js"></script>
 		<script src="app.js"></script>
 	</head>
@@ -17,12 +16,13 @@
 		<div ng-controller="TeamsController" ng-show="tabs.isSet(1)">
 			<p>
 				<input ng-model="name"></input>
+				<input type="file"></input>
 				<button class="btn btn-default" ng-click="addTeam(name)">Add team</button>
 			</p>
 			<div ng-repeat="value in teams">
 				<p>
 					{{$index+1+" "+value.name}} 
-					<a ng-click="delTab($index)">Remove</a>
+					<a ng-click="delTeam($index)">Remove</a>
 				</p>
 			</div>
 			<button class="btn btn-default" ng-click="save()">Save</button>
@@ -31,29 +31,69 @@
 		<div ng-controller="QualificationController" ng-show="tabs.isSet(2)">
 			qualification
 			{{counter | date:'mm:ss:sss'}}
-			<div ng-repeat="value in team.teams">
-				<p>
-					{{$index+1+" "+value.name}} - {{value.t1 | date:'mm:ss:sss'}}
-					<button class="btn btn-default" ng-click="start($index)">Start</button>
-					<button class="btn btn-default" ng-click="stop($index)">Stop</button>
-				</p>
-			</div>
+			<table style="width:100%">
+				<tr>
+					<th>№</th>
+					<th>Name</th>
+					<th>1</th>
+					<th>2</th>
+					<th>3</th>
+					<th>Best Time</th>
+				</tr>
+				<tr ng-repeat="value in teams">
+					<td>{{$index + 1}}</td>
+					<td>{{value.name}}</td>
+					<td>
+						{{value.t1[0] | date:'mm:ss:sss'}}
+						<a ng-click="remove($index,0)">x</a>
+					</td>
+					<td>
+						{{value.t1[1] | date:'mm:ss:sss'}}
+						<a ng-click="remove($index,1)">x</a>
+					</td>
+					<td>
+						{{value.t1[2] | date:'mm:ss:sss'}}
+						<a ng-click="remove($index,2)">x</a>
+					</td>
+					<td>{{value.max | date:'mm:ss:sss'}}</td>
+				</tr>
+			</table>
+
+			<select class="selectpicker" ng-model="selectedTeam">
+				<option  value="{{$index}}" ng-repeat="value in teams">{{value.name}}</option>
+			</select>
+			<button class="btn btn-default" ng-click="start(selectedTeam)">Start</button>
+			<button class="btn btn-default" ng-click="stop(selectedTeam)">Stop</button>
 		</div>
 
-		<div ng-controller="RaceController as obj" ng-show="tabs.isSet(3)">
-			<p>best time {{obj.bestLap | date:'mm:ss:sss'}}</p>
-			<p>Number of laps in a race {{obj.team.numberLaps}}</p>
+		<div ng-controller="RaceController" ng-show="tabs.isSet(3)">
+			<p>best time {{bestLap | date:'mm:ss:sss'}}</p>
+			<p>Number of laps in a race {{numberLaps}}</p>
 			<p>
-				Race start {{obj.startTime | date:'hh:mm:ss:sss'}} 
-				<button class="btn btn-default" ng-click="obj.startRace()">Start</button>
+				Race start {{startTime | date:'hh:mm:ss:sss'}} 
+				<button class="btn btn-default" ng-click="startRace()">Start</button>
 			</p>
-			<div ng-repeat="value in obj.team.teams">
-				<p>{{$index+1+" "+value.name}}
-					  make {{value.laps}} laps in {{value.time | date:'mm:ss:sss'}} {{value.finished}}
-					<button class="btn btn-default" class="btn-u" ng-click="obj.addLap($index)">Add lap to team</button>
-				</p>
-			</div>
+			<table style="width:100%">
+				<tr>
+					<th>N</th>
+					<th>Name</th>
+					<th>Laps</th>
+					<th>Time</th>
+					<th>Add Lap</th>
+				</tr>
+				<tr ng-repeat="value in teams">
+					<td>{{$index+1}}</td>
+					<td>{{value.name}}</td>
+					<td>{{value.laps}}</td>
+					<td>{{value.time | date:'mm:ss:sss'}}</td>
+					<td>
+						<button class="btn btn-default" class="btn-u" ng-click="addLap($index)">Add lap to team</button>
+					</td>
+				</tr>
+			</table>
 		</div>
 
 	</body>
 </html>
+
+	
