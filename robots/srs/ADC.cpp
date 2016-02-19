@@ -11,6 +11,7 @@ volatile unsigned char marker_sensor_is_ready[4];
 
 void ADC_setup()
 {
+  analogReference(DEFAULT); //analog init 
   cli();
   // ADC initialization
   // ADC Clock frequency: 125,000 kHz

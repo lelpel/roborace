@@ -8,24 +8,24 @@
 #include "motor.h"
 #include "PWMServo.h"
 #include "sensors.h"
+#include "uart.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup()
-{
-  analogReference(DEFAULT); //analog init  
+{   
+  
   ADC_setup();
   speedInit();
   setupMotorServo();
   setupIrrecv();
-
+  USART_Init();
+  USART_SendByte('Z');
   pinMode(BUTTON, INPUT); //button init
   digitalWrite(BUTTON,HIGH); //set pul-up resistor
 
-  Serial.begin(SERIAL_SPEED); //init serial
-  // say START
-  Serial.println("\nStart");
-
+  
 }
+
 //VARIABLEAS 
 int angle = 0;
 char speedR = 0;
@@ -34,7 +34,7 @@ boolean isBumpk = false;
 int lapCount = 0;
 int lapTime = 0;
 
-unsigned long lastTimeSPEED = 0; // used in module speed
+
 char autoMode = 2; // is auto mode enable ore no?
 
 
@@ -63,18 +63,6 @@ int mod = 2;
 /////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// functions
 
-void radioMove(int inServo,int inMotor,int inRight,int inLeft,int inForwrd,int inNeutral,int inBack) {
-  angle = map(inServo,inLeft,inRight,-SERVO_MAX_ANGLE,SERVO_MAX_ANGLE);
-  if (inMotor<(inBack+100)) {
-    back();
-    delay(300);
-  }
-  else {
-    speedR = map( inMotor,inForwrd,inNeutral,20,0);
-  }
-
-}
-
 void ledSwitch(boolean value) {
   if (value == HIGH) digitalWrite(LED_PIN, HIGH);
   else digitalWrite(LED_PIN, LOW);
@@ -89,125 +77,8 @@ void ledSwitch(boolean value) {
 
 
 void loop() {  
-  //  while(1)
-  //  {
-  //    
-  //    if(Serial.available() > 0){ 
-  //      timer1 = millis();   
-  //      prevCommand = command;
-  //      command = Serial.read(); 
-  //      //Change pin mode only if new command is different from previous.   
-  //      if(command!=prevCommand){
-  //        //Serial.println(command);
-  //        switch(command){
-  //        case 'F':
-  //          speedR =  velocity;
-  //          angle = 0; 
-  //          //yellowCar.Forward_4W(velocity);
-  //          break;
-  //        case 'B':  
-  //          //yellowCar.Back_4W(velocity);
-  //          angle = 0;
-  //          back();
-  //          delay(500);
-  //          break;
-  //        case 'L':  
-  //          //yellowCar.Left_4W();
-  //          angle = -SERVO_MAX_ANGLE;
-  //          break;
-  //        case 'R':
-  //          angle = SERVO_MAX_ANGLE;
-  //          //yellowCar.Right_4W();  
-  //          break;
-  //        case 'S': 
-  //          speedR =  0;
-  //          angle = 0;
-  //          //yellowCar.Stopped_4W();
-  //          break; 
-  //        case 'I':  //FR  
-  //          speedR = velocity;
-  //          angle = SERVO_MAX_ANGLE;
-  //          //yellowCar.ForwardRight_4W(velocity);
-  //          break; 
-  //        case 'J':  //BR  
-  //          //yellowCar.BackRight_4W(velocity);
-  //          break;        
-  //        case 'G':  //FL 
-  //          speedR = velocity;
-  //          angle = -SERVO_MAX_ANGLE; 
-  //          //yellowCar.ForwardLeft_4W(velocity);
-  //          break; 
-  //        case 'H':  //BL
-  //          //yellowCar.BackLeft_4W(velocity);
-  //          break;
-  //        case 'W':  //Font ON 
-  //          //digitalWrite(pinfrontLights, HIGH);
-  //          break;
-  //        case 'w':  //Font OFF
-  //          //digitalWrite(pinfrontLights, LOW);
-  //          break;
-  //        case 'U':  //Back ON 
-  //          //digitalWrite(pinbackLights, HIGH);
-  //          break;
-  //        case 'u':  //Back OFF 
-  //          //digitalWrite(pinbackLights, LOW);
-  //          break; 
-  //        case 'D':  //Everything OFF 
-  //          //digitalWrite(pinfrontLights, LOW);
-  //          //digitalWrite(pinbackLights, LOW);
-  //          //yellowCar.Stopped_4W();
-  //          break;         
-  //        default:  //Get velocity
-  //          if(command=='q'){
-  //            velocity = 10;
-  ////            velocity = 255;  //Full velocity
-  //            //yellowCar.SetSpeed_4W(velocity);
-  //          }
-  //          else{ 
-  //            //Chars '0' - '9' have an integer equivalence of 48 - 57, accordingly.
-  //            if((command >= 48) && (command <= 57)){ 
-  //              //Subtracting 48 changes the range from 48-57 to 0-9.
-  //              //Multiplying by 25 changes the range from 0-9 to 0-225.
-  ////              velocity = (command - 48)*25;       
-  ////              yellowCar.SetSpeed_4W(velocity);
-  //                velocity = (command - 48);
-  //            }
-  //          }
-  //        }
-  //      }
-  //    }
-  //    else{
-  //      timer0 = millis();  //Get the current time (millis since execution started).
-  //      //Check if it has been 500ms since we received last command.
-  //      if((timer0 - timer1)>500){  
-  //        //More tan 500ms have passed since last command received, car is out of range.
-  //        //Therefore stop the car and turn lights off.
-  //        //digitalWrite(pinfrontLights, LOW);
-  //        //digitalWrite(pinbackLights, LOW);
-  //        //yellowCar.Stopped_4W();
-  //        speedR = 0;
-  //      }
-  //    }
-  //    writeServo(angle);
-  //    if(millis()-lastTimeSPEED>30)////
-  //    {     
-  //      realRobotSpeed = getSpeed();                                                                                                                                                                                                                                           
-  //      //Serial.println(realRobotSpeed);
-  //      moveRobot(speedR);
-  //      lastTimeSPEED = millis();
-  //    }
-  //  
-  //    
-  //  }
 
-  //  writeServo(-90);
-  //  delay(5000);
-  //  writeServo(0);
-  //  delay(5000);
-  //  writeServo(90);
-  //  delay(5000);
-
-  Serial.println("AUTO");
+  
 
   //    while(1)
   //    {
@@ -238,7 +109,7 @@ void loop() {
       sen_left[0] = sen_left[1];
       sen_left[1] = sen_left[2];
       sen_left[2] =  sen_data[SLEFT];
-      med_left = median_of_3(sen_left[0],sen_left[1],sen_left[2]);// тут медианный фильтр
+      med_left = median_of_3(sen_left[0],sen_left[1],sen_left[2]);
       marker_sensor_is_ready[SLEFT] = 0;
     }
     if(marker_sensor_is_ready[SRIGHT])
@@ -246,7 +117,7 @@ void loop() {
       sen_right[0] = sen_right[1];
       sen_right[1] = sen_right[2];
       sen_right[2] =  sen_data[SRIGHT];
-      med_right = median_of_3(sen_right[0],sen_right[1],sen_right[2]);// тут медианный фильтр
+      med_right = median_of_3(sen_right[0],sen_right[1],sen_right[2]);
       marker_sensor_is_ready[SRIGHT] = 0;
     }
     if(marker_sensor_is_ready[SLEFTCENTER])
@@ -254,7 +125,7 @@ void loop() {
       sen_leftcenter[0] = sen_leftcenter[1];
       sen_leftcenter[1] = sen_leftcenter[2];
       sen_leftcenter[2] =  sen_data[SLEFTCENTER];
-      med_leftcenter = median_of_3(sen_leftcenter[0],sen_leftcenter[1],sen_leftcenter[2]);// тут медианный фильтр
+      med_leftcenter = median_of_3(sen_leftcenter[0],sen_leftcenter[1],sen_leftcenter[2]);
       marker_sensor_is_ready[SLEFTCENTER] = 0;
     }
 
@@ -263,80 +134,78 @@ void loop() {
       sen_rightcenter[0] = sen_rightcenter[1];
       sen_rightcenter[1] = sen_rightcenter[2];
       sen_rightcenter[2] =  sen_data[SRIGHTCENTER];
-      med_rightcenter = median_of_3(sen_rightcenter[0],sen_rightcenter[1],sen_rightcenter[2]);// тут медианный фильтр
+      med_rightcenter = median_of_3(sen_rightcenter[0],sen_rightcenter[1],sen_rightcenter[2]);
       marker_sensor_is_ready[SRIGHTCENTER] = 0;
     }
     ///////////////////////////////////////////////////////////////////
 
-
-
     switch(mod)
     {
-    case 0:
-      // right wall
-      if((med_rightcenter<100)&&(med_right<70)) {
-        angle = -50*(double)( med_rightcenter) ;
-      }
-      else {
-        if(med_rightcenter<100)  angle = 350*(double)( med_right-30)/(double)(30 + med_right) ;
-        else angle = 50*(double)( med_right-30)/(double)(30 + med_right) ;
-      }
-      //speed
-      if(  (med_rightcenter>120)&&(abs(angle)<15))
-      {
-        speedR = 10;//10
-      }
-      else
-      {
-        if (realRobotSpeed>20)
-          speedR = -64;
-        else if(realRobotSpeed > 6)
-          speedR = 0;
-        else 
-          speedR = 1;
-      }
-      break;
-    case 1:
-      //left wall
-      if((med_leftcenter<100)&&(med_left<70)) {
-        angle = 50*(double)( med_leftcenter) ;
-      }
-      else {
-        if(med_leftcenter<100)  angle = 350*(double)( -med_left+30)/(double)(30 + med_left) ;
-        else angle = 50*(double)( -med_left+30)/(double)(30 + med_left) ;
-      }
-      //speed
-      if(  (med_leftcenter>120)&&(abs(angle)<15))
-      {
-        speedR = 10;//10
-      }
-      else
-      {
-        if (realRobotSpeed>20)
-          speedR = -64;
-        else if(realRobotSpeed > 6)
-          speedR = 0;
-        else 
-          speedR = 1;
-      }
-      break;
-    case 2:
-      //center
-      //if((med_leftcenter+med_rightcenter)>250)
-      if((med_rightcenter>130)||(med_leftcenter>130)) {
-        angle = 50*(double)( med_right-med_left)/(double)(med_left + med_right);
-        speedR = 50;//10
-      }
-      else {
-        angle = 200*(double)( med_right-med_left)/(double)(med_left + med_right);
-        if (realRobotSpeed>15) //20
-          speedR = -64;
-        else if(realRobotSpeed > 10)
-          speedR = 0;   
-        else 
-          speedR = 10;//1
-      }
-      break;        
+      case 0:
+        // right wall
+        if((med_rightcenter<100)&&(med_right<70)) {
+          angle = -50*(double)( med_rightcenter) ;
+        }
+        else {
+          if(med_rightcenter<100)  angle = 350*(double)( med_right-30)/(double)(30 + med_right) ;
+          else angle = 50*(double)( med_right-30)/(double)(30 + med_right) ;
+        }
+        //speed
+        if(  (med_rightcenter>120)&&(abs(angle)<15))
+        {
+          speedR = 10;//10
+        }
+        else
+        {
+          if (realRobotSpeed>20)
+            speedR = -64;
+          else if(realRobotSpeed > 6)
+            speedR = 0;
+          else 
+            speedR = 1;
+        }
+        break;
+      case 1:
+        //left wall
+        if((med_leftcenter<100)&&(med_left<70)) {
+          angle = 50*(double)( med_leftcenter) ;
+        }
+        else {
+          if(med_leftcenter<100)  angle = 350*(double)( -med_left+30)/(double)(30 + med_left) ;
+          else angle = 50*(double)( -med_left+30)/(double)(30 + med_left) ;
+        }
+        //speed
+        if(  (med_leftcenter>120)&&(abs(angle)<15))
+        {
+          speedR = 10;//10
+        }
+        else
+        {
+          if (realRobotSpeed>20)
+            speedR = -64;
+          else if(realRobotSpeed > 6)
+            speedR = 0;
+          else 
+            speedR = 1;
+        }
+        break;
+      case 2:
+        //center
+        //if((med_leftcenter+med_rightcenter)>250)
+        if((med_rightcenter>130)||(med_leftcenter>130)) {
+          angle = 50*(double)( med_right-med_left)/(double)(med_left + med_right);
+          speedR = 50;//10
+        }
+        else {
+          angle = 200*(double)( med_right-med_left)/(double)(med_left + med_right);
+          if (realRobotSpeed>15) //20
+            speedR = -64;
+          else if(realRobotSpeed > 10)
+            speedR = 0;   
+          else 
+            speedR = 10;//1
+        }
+        break;        
     }
 
 
@@ -373,36 +242,35 @@ void loop() {
     {
       k = 0;
     }
+
+
     ///////////////////////////////////////////////////////
     // Speed and servo
+    
+    writeServo(angle); 
+    
     // speed table 
     // set value  ----- real speed -- break speed
     // 1                6             3
     // 10               10            4
     // 20               16            6
-
-    writeServo(angle);
-    if(millis()-lastTimeSPEED>30) {     
+    static unsigned long currentMillis = 0;
+    static unsigned long timeToUse = 0; // used in module speed
+    currentMillis = millis();
+    if(currentMillis > timeToUse) {
+      timeToUse = currentMillis + 30;     
       realRobotSpeed = getSpeed();                                                                                                                                                                                                                                           
-      //Serial.println(realRobotSpeed);
       moveRobot(speedR);
-      lastTimeSPEED = millis();
-      if(speedR) {
-        if(realRobotSpeed<=((speedR/2<=3)?3:speedR/2)) { 
-          isBumpk++; 
-        }
-        else { 
-          isBumpk = 0; 
-        }
-      }      
+      isBumpk = (speedR && 
+        (realRobotSpeed<=((speedR/2<=3)?3:speedR/2))
+      ) ? isBumpk+1 : 0;
     }
+    
+    
     ////////////////////////////////////////////////////////
     // BATTERY
-    if(get_voltage(6)<11500) {
-      voltageCount++;
-      if (voltageCount>100) ledSwitch(HIGH);
-    }
-    else voltageCount = 0;
+    voltageCount = (get_voltage(6)<11500) ? voltageCount+1 : 0;
+    ledSwitch(voltageCount>100 ? HIGH : LOW);
 
     ////////////////////////////////////////////////////////
     // display data
@@ -426,6 +294,7 @@ void loop() {
   }
 
 }
+
 
 
 
