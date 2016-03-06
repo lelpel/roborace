@@ -5,7 +5,7 @@
 #define SERVO_OFFSET 95
 #define SERVO_MAX_ANGLE 70
 ////47
-#define STCALC(a) (SERVO_OFFSET+(a)) 
+#define STCALC(a) (SERVO_OFFSET-(a)) 
 //Servo analog output
 #define SERVOANALOGPIN 3
 #define SERVOLEFTVOLTAGE 410
@@ -22,9 +22,9 @@
 #define LED 13
 // distanse (analog sensors)
 #define SRIGHT 2
-#define SLEFTCENTER 1
-#define SRIGHTCENTER 3
-#define SLEFT 0
+#define SLEFTCENTER 3
+#define SRIGHTCENTER 0
+#define SLEFT 1
 // serial
 #define SERIAL_SPEED 115200
 //

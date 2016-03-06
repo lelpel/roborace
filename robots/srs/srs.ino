@@ -18,25 +18,22 @@ void setup()
   speedInit();
   setupMotorServo();
   setupIrrecv();
+  Serial.begin(SERIAL_SPEED); //init serial
   USART_Init();
-  USART_SendByte('Z');
+  USART_SendByte('S');
+  // say START
+  //Serial.println("\nStart");
   pinMode(BUTTON, INPUT); //button init
   digitalWrite(BUTTON,HIGH); //set pul-up resistor
-
-  
 }
 
 //VARIABLEAS 
 int angle = 0;
 char speedR = 0;
 boolean isBumpk = false;
-
 int lapCount = 0;
 int lapTime = 0;
-
-
 char autoMode = 2; // is auto mode enable ore no?
-
 
 unsigned char sen_left[3];
 unsigned char med_left;
@@ -54,50 +51,31 @@ char prevCommand = 'A';
 int velocity = 0;   
 unsigned long timer0 = 2000;  //Stores the time (in millis since execution started) 
 unsigned long timer1 = 0;  //Stores the time when the last command was received from the phone
-
 int voltageCount = 0;
 
 int mod = 2;
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////// functions
-
-void ledSwitch(boolean value) {
-  if (value == HIGH) digitalWrite(LED_PIN, HIGH);
-  else digitalWrite(LED_PIN, LOW);
-}
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// loop
-
-
-
 void loop() {  
 
-  
-
-  //    while(1)
-  //    {
-  //      if (irrecv.decode(&results))   
-  //      {   
-  //        ir_command = results.value;
-  //        //SaveEEPROM(results.value);   
-  //        Serial.println(ir_command);
-  //        irrecv.resume(); 
-  //        if(ir_command==1) { 
-  //          ledSwitch(HIGH);
-  //        }
-  //        if(ir_command==2) { 
-  //          ledSwitch(LOW); 
-  //          break; 
-  //        }
-  //
-  //      }
-  //    }
+//  while(1)
+//  {
+//    if (irrecv.decode(&results))   
+//    {   
+//      ir_command = results.value;
+//      //SaveEEPROM(results.value);   
+//      Serial.println(ir_command);
+//      irrecv.resume(); 
+//      if(ir_command==1) { 
+//        ledSwitch(HIGH);
+//      }
+//      if(ir_command==2) { 
+//        ledSwitch(LOW); 
+//        break; 
+//      }
+//
+//    }
+//  }
 
   while(1)
   {
@@ -138,7 +116,6 @@ void loop() {
       marker_sensor_is_ready[SRIGHTCENTER] = 0;
     }
     ///////////////////////////////////////////////////////////////////
-
     switch(mod)
     {
       case 0:
@@ -207,48 +184,42 @@ void loop() {
         }
         break;        
     }
-
-
     /////////////////////////////////////////////////////////////////////////
     //BUMP 
-    if (bump(4)) angle =  SERVO_MAX_ANGLE;
-    if (bump(5)) angle = -SERVO_MAX_ANGLE;
-
-    if((isBumpk>12)||bump(4)||bump(5)) // time? bump(4)||bump(5)||0   12
-    {
-      if(k>300)// 50
-      {
-        back();
-        writeServo(0);
-        if(bump(4)||bump(5)){
-          writeServo(-angle);
-          delay(400);
-        }
-        if(isBumpk>7){ 
-          delay(400);
-        }        
-        delay(10);
-        isBumpk = 0;
-        speedR = 1;
-        k = 0;
-        moveRobot(10);
-      }
-      else
-      {
-        k++;
-      }
-    }
-    else
-    {
-      k = 0;
-    }
-
-
+//    if (bump(4)) angle =  SERVO_MAX_ANGLE;
+//    if (bump(5)) angle = -SERVO_MAX_ANGLE;
+//
+//    if((isBumpk>12)||bump(4)||bump(5)) // time? bump(4)||bump(5)||0   12
+//    {
+//      if(k>300)// 50
+//      {
+//        back();
+//        writeServo(0);
+//        if(bump(4)||bump(5)){
+//          writeServo(-angle);
+//          delay(400);
+//        }
+//        if(isBumpk>7){ 
+//          delay(400);
+//        }        
+//        delay(10);
+//        isBumpk = 0;
+//        speedR = 1;
+//        k = 0;
+//        moveRobot(10);
+//      }
+//      else
+//      {
+//        k++;
+//      }
+//    }
+//    else
+//    {
+//      k = 0;
+//    }
     ///////////////////////////////////////////////////////
     // Speed and servo
-    
     writeServo(angle); 
-    
     // speed table 
     // set value  ----- real speed -- break speed
     // 1                6             3
@@ -265,31 +236,24 @@ void loop() {
         (realRobotSpeed<=((speedR/2<=3)?3:speedR/2))
       ) ? isBumpk+1 : 0;
     }
-    
-    
     ////////////////////////////////////////////////////////
     // BATTERY
     voltageCount = (get_voltage(6)<11500) ? voltageCount+1 : 0;
     ledSwitch(voltageCount>100 ? HIGH : LOW);
-
     ////////////////////////////////////////////////////////
     // display data
-    //    Serial.print( med_left,DEC); 
-    //    Serial.print("  ");
-    //    Serial.print( med_leftcenter,DEC);
-    //    Serial.print("  ");
-    //    Serial.print( med_rightcenter,DEC);
-    //    Serial.print("  ");
-    //    Serial.print( med_right,DEC);
-    //    Serial.print("  ");
-    //    Serial.print(speedR);
-    //    Serial.print("  ");
-    //    Serial.println(angle);
-    //    delay(10);
-
-
-
-
+         
+//        Serial.print( med_left,DEC); 
+//        Serial.print("  ");
+//        Serial.print( med_leftcenter,DEC);
+//        Serial.print("  ");
+//        Serial.print( med_rightcenter,DEC);
+//        Serial.print("  ");
+//        Serial.print( med_right,DEC);
+//        Serial.print("  ");
+//        Serial.print(speedR);
+//        Serial.print("  ");
+//        Serial.println(angle);
 
   }
 

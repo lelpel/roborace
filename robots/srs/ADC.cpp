@@ -2,7 +2,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "ADC.h"
-
+#include "GP2Y0A60SZLF.h"
 
 volatile unsigned int adc_data[LAST_ADC_INPUT-FIRST_ADC_INPUT+1];
 volatile unsigned int sen_data[LAST_ADC_INPUT-FIRST_ADC_INPUT+1];
@@ -49,6 +49,7 @@ ISR(ADC_vect)
   //delay_us(10);
   if(uc_input_index_last<4)
   {
+    //sen_data[uc_input_index_last] = GP2Y0A60SZLF[ (adc_data[uc_input_index_last]) / 10];
     volatile unsigned int val = (8762.88/(adc_data[uc_input_index_last]/2 + 18.32)-12.06);
     sen_data[uc_input_index_last] = (val>150?150:val);
     marker_sensor_is_ready[uc_input_index_last] = 1;

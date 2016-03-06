@@ -4,16 +4,26 @@
 #include "uart.h"
 #include "config.h"
 
+uint8_t message[] = {
+  'S',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5', // speed
+  '6', // angle
+  'E'
+};
 volatile unsigned char value;  
 /* This variable is volatile so both main and RX interrupt can use it.
-It could also be a uint8_t type */
+ It could also be a uint8_t type */
 
 void USART_Init(){
   // Set baud rate
-  UBRR0H = (uint8_t)(UBRR_VALUE>>8);
-  UBRR0L = (uint8_t)UBRR_VALUE;
+  //  UBRR0H = (uint8_t)(UBRR_VALUE>>8);
+  //  UBRR0L = (uint8_t)UBRR_VALUE;
   // Set frame format to 8 data bits, no parity, 1 stop bit
-  UCSR0C |= (1<<UCSZ01)|(1<<UCSZ00);
+  //  UCSR0C |= (1<<UCSZ01)|(1<<UCSZ00);
   // Enable receiver and transmitter and receive complete interrupt 
   UCSR0B = ((1<<TXEN0)|(1<<RXEN0) | (1<<RXCIE0));
 }
@@ -21,18 +31,21 @@ void USART_Init(){
 
 
 /* Interrupt Service Routine for Receive Complete 
-NOTE: vector name changes with different AVRs see AVRStudio -
-Help - AVR-Libc reference - Library Reference - <avr/interrupt.h>: Interrupts
-for vector names other than USART_RXC_vect for ATmega32 */
+ NOTE: vector name changes with different AVRs see AVRStudio -
+ Help - AVR-Libc reference - Library Reference - <avr/interrupt.h>: Interrupts
+ for vector names other than USART_RXC_vect for ATmega32 */
 
-ISR(USART_RXC_vect){ 
-   value = UDR0;             //read UART register into value
+ISR(USART_RXC_vect) { 
+  value = UDR0;             //read UART register into value
 }
 
+//ISR(USART_TXC_vect) { 
+//  UCSR0A |= (1<<TXC0);
+//  UDR0 = '1';             //read UART register into value
+//}
 
 
-
-void USART_SendByte(uint8_t u8Data){
+void USART_SendByte(uint8_t u8Data) {
   // Wait until last byte has been transmitted
   while((UCSR0A &(1<<UDRE0)) == 0);
 
@@ -45,6 +58,11 @@ void USART_SendByte(uint8_t u8Data){
 uint8_t USART_ReceiveByte(){
   while((UCSR0A &(1<<RXC0)) == 0);
   return UDR0;
+}
+
+uint8_t isTrReady() 
+{
+  return (UCSR0A &(1<<UDRE0)) == 0 ? 1 : 0 ;
 }
 
 
@@ -63,3 +81,4 @@ uint8_t USART_ReceiveByte(){
 //		         // delay just to stop Hyperterminal screen cluttering up    
 //   }
 //}
+

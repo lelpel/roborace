@@ -82,42 +82,46 @@ char moveRobot(int value) // -64 break  +64 forward
   return 1;
 }
 
+
 void back ()
 {
   motorServoR.write(SPEED_ZERO);
   delay(700);
   motorServoR.write(SPEED_BACK_MIN);
-//  
-//  motorServoR.write(SPEED_ZERO-1);
-//  delay(50);
-//  motorServoR.write(SPEED_ZERO-3);
-//  delay(50);
-//  motorServoR.write(SPEED_ZERO-5);
-//  delay(50);
-//  motorServoR.write(SPEED_ZERO-7);
-//  //delay(700);//1000 2000 600
-//  motorServoR.write(SPEED_BACK_MIN);
+  //  
+  //  motorServoR.write(SPEED_ZERO-1);
+  //  delay(50);
+  //  motorServoR.write(SPEED_ZERO-3);
+  //  delay(50);
+  //  motorServoR.write(SPEED_ZERO-5);
+  //  delay(50);
+  //  motorServoR.write(SPEED_ZERO-7);
+  //  //delay(700);//1000 2000 600
+  //  motorServoR.write(SPEED_BACK_MIN);
 }
 
-// SERVO
+
 void getServoInit()
 {
   pinMode(SERVOANALOGPIN,INPUT);
   digitalWrite(SERVOANALOGPIN,HIGH);
 }
+
+
 int getServo() //return servo
 {
   int value = map(adc_data[SERVOANALOGPIN],SERVOLEFTVOLTAGE,SERVORIGHTVOLTAGE,-SERVO_MAX_ANGLE,SERVO_MAX_ANGLE)+7;
   return value;
 }
 
- 
+
 void writeServo (int value )
 {  
   value = constrain(value,-SERVO_MAX_ANGLE,SERVO_MAX_ANGLE);
   wheelServoR.write(STCALC(value)); 
-  
+
 }
+
 
 void setupMotorServo()
 {
@@ -131,5 +135,10 @@ void setupMotorServo()
   // init servo and set it to midle
   wheelServoR.attach(SERVO_PIN_A,920,2070);  // 9
   writeServo(0);
+}
+
+void ledSwitch(boolean value) {
+  if (value == HIGH) digitalWrite(LED_PIN, HIGH);
+  else digitalWrite(LED_PIN, LOW);
 }
 

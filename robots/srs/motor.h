@@ -10,4 +10,4 @@ void getServoInit();
 int getServo();
 void writeServo (int value );
 void setupMotorServo();
-
+void ledSwitch(boolean value);
