@@ -11,18 +11,12 @@
 #include "uart.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void setup()
-{   
-  
+void setup() {   
   ADC_setup();
   speedInit();
   setupMotorServo();
   setupIrrecv();
-  Serial.begin(SERIAL_SPEED); //init serial
   USART_Init();
-  USART_SendByte('S');
-  // say START
-  //Serial.println("\nStart");
   pinMode(BUTTON, INPUT); //button init
   digitalWrite(BUTTON,HIGH); //set pul-up resistor
 }
@@ -57,6 +51,7 @@ int mod = 2;
 /////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// loop
 void loop() {  
+
 
 //  while(1)
 //  {
@@ -235,13 +230,25 @@ void loop() {
       isBumpk = (speedR && 
         (realRobotSpeed<=((speedR/2<=3)?3:speedR/2))
       ) ? isBumpk+1 : 0;
+      
+      // send message to server
+      if(IS_MESSAGE_SEND) {
+        message[1] = med_left;
+        message[2] = med_leftcenter;
+        message[3] = med_rightcenter;
+        message[4] = med_right;
+        message[5] = speedR;
+        message[6] = angle;
+        transmit_message();
+      }
     }
     ////////////////////////////////////////////////////////
     // BATTERY
-    voltageCount = (get_voltage(6)<11500) ? voltageCount+1 : 0;
-    ledSwitch(voltageCount>100 ? HIGH : LOW);
+    //voltageCount = (get_voltage(6)<11500) ? voltageCount+1 : 0;
+    //ledSwitch(voltageCount>100 ? HIGH : LOW);
     ////////////////////////////////////////////////////////
     // display data
+    
          
 //        Serial.print( med_left,DEC); 
 //        Serial.print("  ");
